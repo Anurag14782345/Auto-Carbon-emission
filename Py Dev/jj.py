@@ -26,6 +26,9 @@ def write_to_json(data):
     # Append new data to existing data
     if data:  # Only write if there's data
         existing_data.extend(data)
+        
+        # Filter the combined data to remove entries older than 10 seconds
+        existing_data = filter_old_data(existing_data)
     
         # Write the updated data back to the JSON file
         with open('sensor_data.json', 'w') as file:
@@ -36,12 +39,12 @@ def write_to_json(data):
         print("No data to write!")  # If no data is available
 
 def filter_old_data(data):
-    """Filter out entries older than 3 minutes."""
+    """Filter out entries older than 10 seconds."""
     current_time = datetime.now()
-    three_minutes_ago = current_time - timedelta(minutes=3)
+    ten_seconds_ago = current_time - timedelta(seconds=60)
     
-    # Keep only data within the last 3 minutes
-    return [entry for entry in data if datetime.strptime(entry['timestamp'], '%Y-%m-%d %H:%M:%S') > three_minutes_ago]
+    # Keep only data within the last 10 seconds
+    return [entry for entry in data if datetime.strptime(entry['timestamp'], '%Y-%m-%d %H:%M:%S') > ten_seconds_ago]
 
 try:
     while True:
@@ -70,9 +73,6 @@ try:
             # Check if a minute has passed
             if time.time() - start_time >= 1:
                 print("One minute passed, writing data to JSON")  # Debugging
-                
-                # Filter out entries older than 3 minutes
-                sensor_data = filter_old_data(sensor_data)
                 
                 # Write data to JSON and clear memory
                 write_to_json(sensor_data)

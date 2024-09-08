@@ -9,7 +9,7 @@ function fetchData() {
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Function to update CO plot
+// Function to update CO plot (Simple line graph)
 function updateCOPlot(data) {
     const timestamps = data.map(entry => entry.timestamp);
     const coValues = data.map(entry => entry.co_value);
@@ -18,35 +18,38 @@ function updateCOPlot(data) {
         x: timestamps,
         y: coValues,
         type: 'scatter',
-        mode: 'lines+markers',
-        marker: {color: 'red'},
-        line: {width: 2}
+        mode: 'lines',
+        line: {color: 'red', width: 2}
     };
 
     const layout = {
         title: 'CO Levels (ppm)',
         xaxis: {title: 'Timestamp'},
-        yaxis: {title: 'CO (ppm)'}
+        yaxis: {title: 'CO (ppm)'},
+        margin: {t: 50}
     };
 
     Plotly.newPlot('co-plot', [trace], layout);
 }
 
-// Function to update Safety Rating plot
+// Function to update Safety Rating plot (Simple line graph)
 function updateSafetyRatingPlot(data) {
+    const timestamps = data.map(entry => entry.timestamp);
     const ratings = data.map(entry => classifyEmission(entry.co_value));
 
     const trace = {
-        x: data.map(entry => entry.timestamp),
-        y: ratings,
-        type: 'bar',
-        marker: {color: 'blue'}
+        x: timestamps,
+        y: ratings.map(rating => ratingToNumber(rating)),
+        type: 'scatter',
+        mode: 'lines',
+        line: {color: 'blue', width: 2}
     };
 
     const layout = {
         title: 'Safety Rating',
         xaxis: {title: 'Timestamp'},
-        yaxis: {title: 'Safety Rating'}
+        yaxis: {title: 'Safety Rating'},
+        margin: {t: 50}
     };
 
     Plotly.newPlot('safety-rating-plot', [trace], layout);
@@ -61,6 +64,20 @@ function classifyEmission(coLevel) {
     if (coLevel <= 200) return 'Danger';
     return 'Hazardous';
 }
+
+// Convert safety rating to a numeric scale for plotting
+function ratingToNumber(rating) {
+    const ratingsMap = {
+        'Safest': 1,
+        'Normal': 2,
+        'Average': 3,
+        'Above Average': 4,
+        'Danger': 5,
+        'Hazardous': 6
+    };
+    return ratingsMap[rating];
+}
+
 
 // Fetch data initially and set interval for periodic updates
 fetchData();
