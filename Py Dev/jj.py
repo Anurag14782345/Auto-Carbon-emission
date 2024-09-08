@@ -41,7 +41,7 @@ def write_to_json(data):
 def filter_old_data(data):
     """Filter out entries older than 10 seconds."""
     current_time = datetime.now()
-    ten_seconds_ago = current_time - timedelta(seconds=60)
+    ten_seconds_ago = current_time - timedelta(seconds=5)
     
     # Keep only data within the last 10 seconds
     return [entry for entry in data if datetime.strptime(entry['timestamp'], '%Y-%m-%d %H:%M:%S') > ten_seconds_ago]

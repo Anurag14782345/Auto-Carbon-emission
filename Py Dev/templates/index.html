@@ -3,13 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO Monitoring Dashboard</title>
+    <title>Gas Emission Dashboard</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="/static/js/app.js"></script>
+    <script src="static/js/app.js"></script>
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        #co-plot, #gas-plot, #safety-rating-plot {
+            position: absolute;
+            width: 90%;
+            height: 33.33%; /* Each graph occupies one-third of the screen */
+        }
+
+        #co-plot { top: 0; }
+        #gas-plot { top: 33.33%; }
+        #safety-rating-plot { top: 66.66%; }
+    </style>
 </head>
 <body>
-    <h1>CO Monitoring Dashboard</h1>
-    <div id="co-plot" style="width: 100%; height: 400px;"></div>
-    <div id="safety-rating-plot" style="width: 100%; height: 400px;"></div>
+    <!-- CO Levels Plot -->
+    <div id="co-plot"></div>
+
+    <!-- Gas Levels Plot (For CO2, NO, NO2, SO, SO2, Hydrocarbons) -->
+    <div id="gas-plot"></div>
+
+    <!-- Safety Rating Plot -->
+    <div id="safety-rating-plot"></div>
 </body>
 </html>
