@@ -13,13 +13,13 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            overflow: hidden; /* Prevent scrollbars */
+            overflow: hidden;
         }
 
         #co-plot, #gas-plot, #safety-rating-plot {
             position: absolute;
             width: 90%;
-            height: 33.33%; /* Each graph occupies one-third of the screen */
+            height: 33.33%; 
         }
 
         #co-plot { top: 0; }
@@ -28,13 +28,12 @@
     </style>
 </head>
 <body>
-    <!-- CO Levels Plot -->
     <div id="co-plot"></div>
 
-    <!-- Gas Levels Plot (For CO2, NO, NO2, SO, SO2, Hydrocarbons) -->
+   
     <div id="gas-plot"></div>
 
-    <!-- Safety Rating Plot -->
+    
     <div id="safety-rating-plot"></div>
 </body>
 </html>

@@ -1,9 +1,8 @@
-// Function to fetch and update data
 function fetchData() {
     fetch('/data')
         .then(response => response.json())
         .then(data => {
-            data = addRandomGasValues(data); // Add random gas values
+            data = addRandomGasValues(data);
             updateCOPlot(data);
             updateGasPlot(data);
             updateSafetyRatingPlot(data);
@@ -11,20 +10,18 @@ function fetchData() {
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Add random gas values to data
 function addRandomGasValues(data) {
     return data.map(entry => {
-        entry.co2_value = Math.random() * 400;  // CO2 range: 0-400 ppm
-        entry.no_value = Math.random() * 100;   // NO range: 0-100 ppm
-        entry.no2_value = Math.random() * 50;   // NO2 range: 0-50 ppm
-        entry.so_value = Math.random() * 50;    // SO range: 0-50 ppm
-        entry.so2_value = Math.random() * 50;   // SO2 range: 0-50 ppm
-        entry.hc_value = Math.random() * 150;   // Hydrocarbons range: 0-150 ppm
+        entry.co2_value = Math.random() * 400;
+        entry.no_value = Math.random() * 100;   
+        entry.no2_value = Math.random() * 50;  
+        entry.so_value = Math.random() * 50;  
+        entry.so2_value = Math.random() * 50;   
+        entry.hc_value = Math.random() * 150; 
         return entry;
     });
 }
 
-// Function to update CO plot (Simple line graph)
 function updateCOPlot(data) {
     const timestamps = data.map(entry => entry.timestamp);
     const coValues = data.map(entry => entry.co_value);
@@ -37,21 +34,18 @@ function updateCOPlot(data) {
         line: { color: 'red', width: 2 }
     };
 
-    // CO Plot Layout Adjustment
 const layout = {
     title: 'CO Levels (ppm)',
     xaxis: { title: 'Timestamp' },
     yaxis: { title: 'CO (ppm)' },
     autosize: true,
-    margin: { l: 40, r: 20, t: 40, b: 40 } // Adjust margins to optimize space
+    margin: { l: 40, r: 20, t: 40, b: 40 } 
 };
 
-// Same for Gas and Safety Rating Plots
 
     Plotly.newPlot('co-plot', [trace], layout);
 }
 
-// Function to update Gas levels plot (CO2, NO, NO2, SO, SO2, Hydrocarbons)
 function updateGasPlot(data) {
     const timestamps = data.map(entry => entry.timestamp);
 
@@ -119,7 +113,6 @@ function updateGasPlot(data) {
     Plotly.newPlot('gas-plot', [traceCO2, traceNO, traceNO2, traceSO, traceSO2, traceHC], layout);
 }
 
-// Function to update Safety Rating plot
 function updateSafetyRatingPlot(data) {
     const timestamps = data.map(entry => entry.timestamp);
     const ratings = data.map(entry => classifySafetyRating(entry));
@@ -142,7 +135,6 @@ function updateSafetyRatingPlot(data) {
     Plotly.newPlot('safety-rating-plot', [trace], layout);
 }
 
-// New safety rating logic considering all gases
 function classifySafetyRating(entry) {
     const totalScore = entry.co_value / 200 + entry.co2_value / 400 + entry.no_value / 100 +
                        entry.no2_value / 50 + entry.so_value / 50 + entry.so2_value / 50 + entry.hc_value / 150;
@@ -155,7 +147,6 @@ function classifySafetyRating(entry) {
     return 'Hazardous';
 }
 
-// Convert safety rating to a numeric scale for plotting
 function ratingToNumber(rating) {
     const ratingsMap = {
         'Safest': 1,
@@ -168,6 +159,5 @@ function ratingToNumber(rating) {
     return ratingsMap[rating];
 }
 
-// Fetch data initially and set interval for periodic updates
 fetchData();
-setInterval(fetchData, 10000);  // Refresh every 10 seconds
+setInterval(fetchData, 10000);  
